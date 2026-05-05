@@ -1,5 +1,6 @@
 
 import os
+from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -17,7 +18,7 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(",")
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(",")
 
 
 # Application definition
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.middleware.locale.LocaleMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -103,20 +105,26 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
+LANGUAGES = [
+    ("en", _("English")),
+    ("bn", _("Bengali")),
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR / 'locale')
+]
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = os.getenv("STATIC_URL", "/static/")
 STATIC_ROOT = BASE_DIR / os.getenv("STATIC_ROOT", "staticfiles")
 STATICFILES_DIRS = [
-    BASE_DIR / "static", 
+    BASE_DIR / "static",
 ]
 
 # Media files
